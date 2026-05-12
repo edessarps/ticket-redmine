@@ -1038,7 +1038,8 @@ async function sendTicket(extraInfo = null) {
     }
     const result = await res.json();
     setProgress(100);
-    showToast('success', 'Ticket créé !', `#${result.issue.id} — [${env}] ${subject}`);
+    const issueId = result?.issue?.id || result?.id || '?';
+    showToast('success', 'Ticket créé !', `#${issueId} — [${env}] ${subject}`);
 
     setTimeout(() => {
       document.getElementById('reporterInput').value = '';
