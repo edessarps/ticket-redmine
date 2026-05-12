@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rhinov — Signaler un problème</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white:    #FFFFFF;
+    --sand-0:   #F5EDE4;
+    --sand-1:   #EDD9C5;
+    --sand-2:   #C4A882;
+    --sand-3:   #A08060;
+    --sand-4:   #7A5C48;
+    --gray-lt:  #E8E5E0;
+    --gray-md:  #3D3D3D;
+    --black:    #1A1A1A;
+    --brown:    #6B3A2A;
+    --sage:     #6B7E5A;
+    --slate:    #4A6058;
+    --bluegray: #4A6070;
+    --navy:     #1A3545;
+    --coral:    #E84A3C;
+    --rose:     #F0A090;
+    --radius:   12px;
+    --font-title: 'Barlow Condensed', sans-serif;
+    --font-body:  'Barlow', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--sand-0);
+    color: var(--black);
+    font-family: var(--font-body);
+    font-size: 15px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* HEADER */
+  .header {
+    width: 100%;
+    background: var(--black);
+    color: var(--white);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .header-logo {
+    font-family: var(--font-title);
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .header-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
+  .header-sub {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.45);
+  }
+  .header-badge {
+    background: var(--coral);
+    color: var(--white);
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* HERO */
+  .hero {
+    width: 100%;
+    background: var(--black);
+    color: var(--white);
+    padding: 40px 32px 44px;
+    border-bottom: 3px solid var(--sand-2);
+  }
+  .hero-inner { max-width: 680px; margin: 0 auto; }
+  .hero-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand-2);
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-family: var(--font-title);
+    font-weight: 900;
+    font-size: clamp(34px, 6vw, 54px);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  .hero-title em { font-style: normal; color: var(--sand-2); }
+  .hero-desc {
+    margin-top: 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.55;
+    max-width: 420px;
+  }
+
+  /* MAIN */
+  .main { width: 100%; max-width: 680px; padding: 36px 20px 80px; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand-3);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--gray-lt); }
+
+  /* CARD */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--gray-lt);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  /* PRIORITY */
+  .prio-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
+  .prio-btn {
+    border: 1.5px solid var(--gray-lt);
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 14px 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-family: var(--font-body);
+  }
+  .prio-btn:hover { border-color: var(--gray-md); box-shadow: 0 4px 16px rgba(0,0,0,0.07); transform: translateY(-1px); }
+  .prio-dot { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 2px; }
+  .prio-name { font-family: var(--font-title); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1; }
+  .prio-desc { font-size: 10px; color: var(--sand-3); line-height: 1.3; }
+  .prio-check {
+    position: absolute; top: 10px; right: 10px;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: none; align-items: center; justify-content: center;
+  }
+  .prio-check svg { width: 10px; height: 10px; }
+
+  .prio-btn[data-p="bloquant"] .prio-dot { background: var(--coral); }
+  .prio-btn[data-p="bloquant"].active { border-color: var(--coral); background: #FEF5F4; }
+  .prio-btn[data-p="bloquant"].active .prio-check { display: flex; background: var(--coral); }
+
+  .prio-btn[data-p="urgent"] .prio-dot { background: var(--sand-3); }
+  .prio-btn[data-p="urgent"].active { border-color: var(--sand-3); background: #FAF4EE; }
+  .prio-btn[data-p="urgent"].active .prio-check { display: flex; background: var(--sand-3); }
+
+  .prio-btn[data-p="important"] .prio-dot { background: var(--bluegray); }
+  .prio-btn[data-p="important"].active { border-color: var(--bluegray); background: #F2F5F8; }
+  .prio-btn[data-p="important"].active .prio-check { display: flex; background: var(--bluegray); }
+
+  .prio-btn[data-p="normal"] .prio-dot { background: var(--sage); }
+  .prio-btn[data-p="normal"].active { border-color: var(--sage); background: #F3F6F1; }
+  .prio-btn[data-p="normal"].active .prio-check { display: flex; background: var(--sage); }
+
+  .prio-btn[data-p="bas"] .prio-dot { background: var(--gray-lt); border: 1px solid var(--sand-2); }
+  .prio-btn[data-p="bas"].active { border-color: var(--sand-3); background: #FAF4EE; }
+  .prio-btn[data-p="bas"].active .prio-check { display: flex; background: var(--sand-3); }
+
+  /* FIELDS */
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-md);
+    margin-bottom: 7px;
+  }
+  .req::after { content: ' *'; color: var(--coral); }
+  input[type="text"], textarea, select {
+    width: 100%;
+    background: var(--white);
+    border: 1.5px solid var(--gray-lt);
+    border-radius: 8px;
+    color: var(--black);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--black);
+    box-shadow: 0 0 0 3px rgba(26,26,26,0.07);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233D3D3D' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+    cursor: pointer;
+  }
+  select option { color: var(--black); background: var(--white); }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.55; }
+  ::placeholder { color: var(--sand-2); }
+
+  /* AUTOCOMPLETE */
+  .autocomplete-wrap { position: relative; }
+  .autocomplete-wrap input[type="text"] { padding-right: 36px; }
+  .ac-clear {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--sand-3); cursor: pointer;
+    font-size: 18px; line-height: 1; padding: 2px; display: none;
+  }
+  .ac-clear.visible { display: block; }
+  .ac-dropdown {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--white);
+    border: 1.5px solid var(--black);
+    border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+    max-height: 220px; overflow-y: auto;
+    z-index: 100; display: none;
+  }
+  .ac-dropdown.open { display: block; }
+  .ac-item {
+    padding: 10px 14px; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--gray-lt); transition: background 0.1s;
+  }
+  .ac-item:last-child { border-bottom: none; }
+  .ac-item:hover, .ac-item.focused { background: var(--sand-0); }
+  .ac-item mark { background: none; color: var(--coral); font-weight: 700; }
+  .ac-item .ac-initials {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--sand-1); color: var(--sand-4);
+    font-family: var(--font-title); font-weight: 700; font-size: 11px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .ac-empty { padding: 12px 14px; font-size: 13px; color: var(--sand-3); text-align: center; }
+
+  /* DEVICE PILLS */
+  .device-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .device-tag {
+    background: var(--sand-0);
+    border: 1px solid var(--gray-lt);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--gray-md);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ATTACH */
+  .attach-zone {
+    border: 1.5px dashed var(--gray-lt);
+    border-radius: var(--radius);
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--sand-0);
+    position: relative;
+  }
+  .attach-zone:hover, .attach-zone.drag-over { border-color: var(--black); background: var(--gray-lt); }
+  .attach-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .attach-icon { margin-bottom: 8px; color: var(--sand-3); }
+  .attach-icon svg { width: 26px; height: 26px; }
+  .attach-text { font-size: 13px; color: var(--gray-md); font-weight: 500; }
+  .attach-hint { font-size: 11px; color: var(--muted, var(--sand-3)); margin-top: 4px; }
+
+  .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .file-item {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--sand-0); border: 1px solid var(--gray-lt);
+    border-radius: 8px; padding: 9px 12px; font-size: 13px;
+  }
+  .file-item .file-icon { font-size: 16px; flex-shrink: 0; }
+  .file-item .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+  .file-item .file-size { color: var(--sand-3); font-size: 11px; flex-shrink: 0; }
+  .file-remove { background: none; border: none; color: var(--sand-3); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; border-radius: 4px; transition: color 0.15s; flex-shrink: 0; }
+  .file-remove:hover { color: var(--coral); }
+
+  /* SUBMIT */
+  .submit-btn {
+    width: 100%;
+    background: var(--black);
+    color: var(--white);
+    border: 2px solid var(--black);
+    border-radius: 8px;
+    padding: 17px 24px;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--gray-md); border-color: var(--gray-md); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(26,26,26,0.15); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .submit-btn .arrow { transition: transform 0.15s; }
+  .submit-btn:hover:not(:disabled) .arrow { transform: translateX(5px); }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { width: 17px; height: 17px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+  .loading .spinner { display: block; }
+  .loading .btn-label, .loading .arrow { display: none; }
+
+  /* PROGRESS */
+  .progress-wrap { height: 2px; background: var(--gray-lt); border-radius: 2px; overflow: hidden; margin-top: 12px; opacity: 0; transition: opacity 0.2s; }
+  .progress-wrap.visible { opacity: 1; }
+  .progress-fill { height: 100%; background: var(--black); border-radius: 2px; transition: width 0.3s ease; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--white); border: 1.5px solid var(--gray-lt);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex; align-items: flex-start; gap: 14px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 200; max-width: 90vw; width: 420px;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { border-left: 4px solid var(--sage); }
+  .toast.error   { border-left: 4px solid var(--coral); }
+  .toast-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .toast-body { flex: 1; }
+  .toast-body strong { display: block; font-family: var(--font-title); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
+  .toast-body span { font-size: 12px; color: var(--sand-3); line-height: 1.4; }
+  .toast-close { background: none; border: none; color: var(--sand-3); cursor: pointer; font-size: 20px; flex-shrink: 0; }
+  .toast-close:hover { color: var(--black); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,26,26,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 300;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--white);
+    border-radius: 16px 16px 0 0;
+    width: 100%; max-width: 680px;
+    padding: 28px 24px 32px;
+    transform: translateY(40px);
+    transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-lt);
+    margin-bottom: 22px;
+  }
+  .modal-icon {
+    width: 36px; height: 36px; background: var(--black);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    color: var(--sand-2); font-size: 16px; flex-shrink: 0;
+  }
+  .modal-title {
+    font-family: var(--font-title); font-weight: 900;
+    font-size: 20px; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1;
+  }
+  .modal-sub { font-size: 12px; color: var(--sand-3); margin-top: 4px; }
+  .modal-body { display: flex; flex-direction: column; gap: 18px; }
+  .modal-question { }
+  .modal-q-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gray-md); margin-bottom: 7px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .modal-q-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--black); color: var(--white);
+    font-family: var(--font-title); font-weight: 700; font-size: 11px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .modal-q-text { font-size: 14px; color: var(--black); margin-bottom: 8px; font-weight: 500; line-height: 1.4; }
+  .modal-answer {
+    width: 100%; background: var(--sand-0);
+    border: 1.5px solid var(--gray-lt); border-radius: 8px;
+    color: var(--black); font-family: var(--font-body); font-size: 14px;
+    padding: 10px 12px; outline: none; resize: vertical; min-height: 60px;
+    transition: border-color 0.15s;
+  }
+  .modal-answer:focus { border-color: var(--black); }
+  .modal-footer {
+    display: flex; gap: 10px; margin-top: 24px;
+    padding-top: 20px; border-top: 1px solid var(--gray-lt);
+    flex-wrap: wrap;
+  }
+  .modal-btn-skip {
+    flex: 1; background: none; border: 1.5px solid var(--gray-lt);
+    border-radius: 8px; padding: 13px 16px;
+    font-family: var(--font-title); font-weight: 700;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--sand-3); cursor: pointer; transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .modal-btn-skip:hover { border-color: var(--gray-md); color: var(--black); }
+  .modal-btn-send {
+    flex: 2; background: var(--black); border: 2px solid var(--black);
+    border-radius: 8px; padding: 13px 20px;
+    font-family: var(--font-title); font-weight: 700;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--white); cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .modal-btn-send:hover { background: var(--gray-md); }
+  .modal-btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+  .modal-btn-arrow { transition: transform 0.15s; }
+  .modal-btn-send:hover .modal-btn-arrow { transform: translateX(4px); }
+  @keyframes spin2 { to { transform: rotate(360deg); } }
+  .modal-spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin2 0.7s linear infinite; display: none; }
+  .modal-loading .modal-spinner { display: block; }
+  .modal-loading .modal-btn-label, .modal-loading .modal-btn-arrow { display: none; }
+  .modal-analyzing {
+    display: flex; align-items: center; gap: 10px;
+    padding: 20px; color: var(--sand-3); font-size: 13px;
+    justify-content: center;
+  }
+  .modal-analyzing .dots::after {
+    content: ''; animation: dots 1.2s steps(3,end) infinite;
+  }
+  @keyframes dots {
+    0%   { content: '.'; }
+    33%  { content: '..'; }
+    66%  { content: '...'; }
+    100% { content: ''; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  .hero { animation: fadeUp 0.35s ease both; }
+  .main > * { animation: fadeUp 0.35s ease both; }
+  .main > *:nth-child(2) { animation-delay: 0.05s; }
+  .main > *:nth-child(3) { animation-delay: 0.08s; }
+  .main > *:nth-child(4) { animation-delay: 0.11s; }
+  .main > *:nth-child(5) { animation-delay: 0.14s; }
+  .main > *:nth-child(6) { animation-delay: 0.17s; }
+  .main > *:nth-child(7) { animation-delay: 0.20s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 520px) {
+    .header { padding: 0 16px; }
+    .hero { padding: 28px 16px 32px; }
+    .prio-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .prio-btn { flex-direction: row; align-items: center; gap: 12px; padding: 13px 14px; }
+    .prio-dot { margin-bottom: 0; flex-shrink: 0; }
+    .prio-btn .prio-info { display: flex; flex-direction: column; gap: 3px; }
+    .card { padding: 18px 16px; }
+    .main { padding: 24px 14px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <span class="header-logo">Rhinov</span>
+    <span class="header-sep"></span>
+    <span class="header-sub">Support interne</span>
+  </div>
+  <span class="header-badge">Tickets</span>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Signalement interne</div>
+    <h1 class="hero-title">Signaler un<br><em>problème</em></h1>
+    <p class="hero-desc">Créez un ticket directement dans Redmine. Les devs seront notifiés automatiquement.</p>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="section-label">Priorité</div>
+  <div class="card" style="padding:20px;">
+    <div class="prio-grid">
+      <button class="prio-btn" data-p="bloquant" onclick="selectPrio(this)">
+        <div class="prio-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="prio-dot"></div>
+        <div class="prio-info">
+          <span class="prio-name">Bloquant</span>
+          <span class="prio-desc">Tout est à l'arrêt</span>
+        </div>
+      </button>
+      <button class="prio-btn" data-p="urgent" onclick="selectPrio(this)">
+        <div class="prio-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="prio-dot"></div>
+        <div class="prio-info">
+          <span class="prio-name">Urgent</span>
+          <span class="prio-desc">À traiter très vite</span>
+        </div>
+      </button>
+      <button class="prio-btn" data-p="important" onclick="selectPrio(this)">
+        <div class="prio-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="prio-dot"></div>
+        <div class="prio-info">
+          <span class="prio-name">Important</span>
+          <span class="prio-desc">Quelques heures ou jours</span>
+        </div>
+      </button>
+      <button class="prio-btn" data-p="normal" onclick="selectPrio(this)">
+        <div class="prio-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="prio-dot"></div>
+        <div class="prio-info">
+          <span class="prio-name">Normal</span>
+          <span class="prio-desc">Traitement standard</span>
+        </div>
+      </button>
+      <button class="prio-btn" data-p="bas" onclick="selectPrio(this)">
+        <div class="prio-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="prio-dot"></div>
+        <div class="prio-info">
+          <span class="prio-name">Bas</span>
+          <span class="prio-desc">Peut attendre</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="section-label">Informations</div>
+  <div class="card">
+    <div class="field">
+      <label class="req">Votre nom</label>
+      <div class="autocomplete-wrap" id="acWrap">
+        <input type="text" id="reporterInput" placeholder="Tapez votre nom…" autocomplete="off"
+          oninput="acFilter()" onfocus="acOpen()" onkeydown="acKey(event)">
+        <button class="ac-clear" id="acClear" onclick="acClearFn()" tabindex="-1">×</button>
+        <div class="ac-dropdown" id="acDropdown"></div>
+      </div>
+      <input type="hidden" id="reporter">
+    </div>
+    <div class="field">
+      <label class="req">Projet</label>
+      <select id="project" onchange="onProjectChange()">
+        <option value="">— Sélectionner —</option>
+        <option value="Site web B2C">Site web B2C</option>
+        <option value="Site web B2B et MDM Business">Site web B2B et MDM Business</option>
+        <option value="Commandes clients">Commandes clients</option>
+        <option value="Outils internes">Outils internes</option>
+        <option value="Outils externes">Outils externes</option>
+        <option value="Communication client">Communication client</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+    <div class="field" id="subprojectField" style="display:none;">
+      <label class="req">Sous-projet</label>
+      <select id="subproject">
+        <option value="">— Sélectionner —</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section-label">Problème</div>
+  <div class="card">
+    <div class="field">
+      <label class="req">Titre du ticket</label>
+      <input type="text" id="subject" placeholder="Ex : La page panier ne charge pas sur mobile">
+    </div>
+    <div class="field">
+      <label>Détails supplémentaires</label>
+      <textarea id="extra" placeholder="Décrivez le problème, les étapes pour le reproduire, ce que vous attendiez…"></textarea>
+    </div>
+    <div class="field">
+      <label>Système détecté automatiquement</label>
+      <div class="device-pills" id="devicePills">
+        <span class="device-tag">⏳ Chargement…</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Pièces jointes</div>
+  <div class="card">
+    <div class="attach-zone" id="dropZone">
+      <input type="file" id="fileInput" multiple accept="image/*,video/*,.pdf,.mp4,.mov,.webm" onchange="handleFiles(this.files)">
+      <div class="attach-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+        </svg>
+      </div>
+      <div class="attach-text"><strong>Glisser-déposer</strong> ou cliquer pour sélectionner</div>
+      <div class="attach-hint">Images · Vidéos · Screenshots</div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="handleSubmitClick()">
+    <span class="btn-label">Envoyer le ticket</span>
+    <span class="arrow">→</span>
+    <div class="spinner"></div>
+  </button>
+
+</main>
+
+<!-- MODAL QUESTIONS -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon">✦</div>
+      <div>
+        <div class="modal-title">Quelques précisions</div>
+        <div class="modal-sub">Pour aider les développeurs à reproduire le bug rapidement</div>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Questions injectées ici -->
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-skip" onclick="sendTicket()">Passer et envoyer →</button>
+      <button class="modal-btn-send" id="modalSendBtn" onclick="sendWithAnswers()">
+        <span class="modal-btn-label">Envoyer avec les réponses</span>
+        <span class="modal-btn-arrow">→</span>
+        <div class="modal-spinner"></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon"></span>
+  <div class="toast-body">
+    <strong id="toastTitle"></strong>
+    <span id="toastMsg"></span>
+  </div>
+  <button class="toast-close" onclick="hideToast()">×</button>
+</div>
+
+<script>
+const PROJECT_ID = 'rhinov'; // identifiant du projet Redmine
+
+const PRIO_MAP = {
+  bloquant:  { id: 5, label: 'Bloquant' },
+  urgent:    { id: 4, label: 'Urgent' },
+  important: { id: 3, label: 'Important' },
+  normal:    { id: 2, label: 'Normal' },
+  bas:       { id: 1, label: 'Bas' }
+};
+
+// ── NAMES LIST ──
+const NAMES = [
+  "Alex Fioretzi-Ysabel","Alice LEMONNIER","Alizée BOUCHARDIE","Amélie ROUSSEAU",
+  "Angela Gonzalez","Angele","Anne-Charlotte","Anne-Sophie Maroszak",
+  "Antonin COURCAUD","Arnaud Delrue","Arsene DEL SOL","Audrey SAUVE",
+  "Axel POIVERT-MOIRENC","Barbara","Basma","Constance Belloni",
+  "Elodie BOUDAUD","Camille Turpin","Carmen LECIGNE","Cassandra LUISIN",
+  "Célia","Célia BARRAU","Clément Letertre","Edouard","Elie DESSARPS",
+  "Emma LUMEAU","Eric Thommerot","Fanny","Floriane Market","Gabrielle LECONTE",
+  "Géraldine THYBOEUF","Guillaume Sotteau","Hadriel Dié","Hugo NOIRET",
+  "Ilhona","Ingrid POLONYI","Javier","Jihane-Myriam","Johan","Jonathan",
+  "Julia","Julie Gallego","Julien Gaubusseau","Juliette BOURY","Lucie",
+  "Lucie Adrien","Lucie LAGARDE","Luciye Thiebiaut","Lucy DI FANT",
+  "Magali LEROUX","Margaux Hautcoeur","Margaux LAH","Marie Gaches",
+  "Marie Jeanneau","Marion","Marion Macaluso","Marion P","Mathieu Boez",
+  "Mathilde PION","Maxime GOYHENEC","Maylis MADELRIEU","Mohamed MIMOUNI",
+  "Nathalie","Nathan","Nicolas Maréchal","Noah","Noah Laubel",
+  "Sarah PACAUD","Tania TEDESCO","Tony BAUMEL","Vincent D. Dereumaux",
+  "Virginie ARDOUIN","Vivien LIEGE","William"
+].sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
+
+// ── AUTOCOMPLETE ──
+let acSelected = '';
+let acFocusIdx = -1;
+
+function normalize(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function acFilter() {
+  const q = document.getElementById('reporterInput').value;
+  document.getElementById('acClear').classList.toggle('visible', q.length > 0);
+  document.getElementById('reporter').value = '';
+  acSelected = '';
+  acFocusIdx = -1;
+  acRender(q);
+  document.getElementById('acDropdown').classList.add('open');
+}
+
+function acOpen() {
+  const q = document.getElementById('reporterInput').value;
+  acRender(q);
+  document.getElementById('acDropdown').classList.add('open');
+}
+
+function acRender(q) {
+  const dd = document.getElementById('acDropdown');
+  const nq = normalize(q);
+  const matches = q.length === 0
+    ? NAMES
+    : NAMES.filter(n => normalize(n).includes(nq));
+
+  if (matches.length === 0) {
+    dd.innerHTML = '<div class="ac-empty">Aucun résultat</div>';
+    return;
+  }
+
+  dd.innerHTML = matches.map((name, i) => {
+    const initials = name.split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase();
+    const highlighted = q.length > 0
+      ? name.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>')
+      : name;
+    return `<div class="ac-item" data-name="${name}" data-idx="${i}" onmousedown="acSelect('${name.replace(/'/g,"\\'")}')">
+      <span class="ac-initials">${initials}</span>
+      <span>${highlighted}</span>
+    </div>`;
+  }).join('');
+}
+
+function acSelect(name) {
+  document.getElementById('reporterInput').value = name;
+  document.getElementById('reporter').value = name;
+  document.getElementById('acClear').classList.add('visible');
+  acSelected = name;
+  document.getElementById('acDropdown').classList.remove('open');
+}
+
+function acClearFn() {
+  document.getElementById('reporterInput').value = '';
+  document.getElementById('reporter').value = '';
+  document.getElementById('acClear').classList.remove('visible');
+  acSelected = '';
+  document.getElementById('reporterInput').focus();
+}
+
+function acKey(e) {
+  const dd = document.getElementById('acDropdown');
+  const items = dd.querySelectorAll('.ac-item');
+  if (!dd.classList.contains('open')) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    acFocusIdx = Math.min(acFocusIdx + 1, items.length - 1);
+    items.forEach((el, i) => el.classList.toggle('focused', i === acFocusIdx));
+    if (items[acFocusIdx]) items[acFocusIdx].scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    acFocusIdx = Math.max(acFocusIdx - 1, 0);
+    items.forEach((el, i) => el.classList.toggle('focused', i === acFocusIdx));
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (acFocusIdx >= 0 && items[acFocusIdx]) acSelect(items[acFocusIdx].dataset.name);
+  } else if (e.key === 'Escape') {
+    dd.classList.remove('open');
+  }
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', e => {
+  if (!document.getElementById('acWrap').contains(e.target))
+    document.getElementById('acDropdown').classList.remove('open');
+});
+
+const SUBPROJECTS = {
+  'Site web B2C': ['Site','Parcours achat','Blog','Espace client','Book','Diagnostic','IA','Autre'],
+  'Site web B2B et MDM Business': ['Site','Parcours d\'achat','IA','Book','Cahier des charges'],
+  'Outils internes': ['Backoffice','Asset manager','HomePlanner'],
+  'Outils externes': ['Imagine','Shop the look','Content factory'],
+  'Communication client': ['CRM'],
+};
+
+function onProjectChange() {
+  const p = document.getElementById('project').value;
+  const field = document.getElementById('subprojectField');
+  const sel = document.getElementById('subproject');
+  if (SUBPROJECTS[p]) {
+    sel.innerHTML = '<option value="">— Sélectionner —</option>' +
+      SUBPROJECTS[p].map(s => `<option value="${s}">${s}</option>`).join('');
+    field.style.display = 'block';
+  } else {
+    field.style.display = 'none';
+    sel.innerHTML = '<option value="">— Sélectionner —</option>';
+  }
+}
+
+let selectedPrio = null;
+let attachedFiles = [];
+
+function getDevice() {
+  const ua = navigator.userAgent;
+  let browser = 'Inconnu', device = 'Desktop', brand = '';
+  if (/Chrome\/(\d+)/.test(ua) && !/Edg|OPR/.test(ua)) browser = 'Chrome ' + ua.match(/Chrome\/(\d+)/)[1];
+  else if (/Firefox\/(\d+)/.test(ua)) browser = 'Firefox ' + ua.match(/Firefox\/(\d+)/)[1];
+  else if (/Safari\//.test(ua) && !/Chrome/.test(ua)) browser = 'Safari';
+  else if (/Edg\/(\d+)/.test(ua)) browser = 'Edge ' + ua.match(/Edg\/(\d+)/)[1];
+  if (/iPhone/.test(ua)) { device = 'iPhone'; brand = 'Apple'; }
+  else if (/iPad/.test(ua)) { device = 'iPad'; brand = 'Apple'; }
+  else if (/Android/.test(ua)) { device = 'Android'; const m = ua.match(/;\s([^;)]+)\sBuild/); if (m) brand = m[1].trim(); }
+  else if (/Windows/.test(ua)) device = 'PC Windows';
+  else if (/Mac/.test(ua)) { device = 'Mac'; brand = 'Apple'; }
+  return { browser, device: device + (brand ? ' · ' + brand : ''), screen: window.screen.width + '×' + window.screen.height };
+}
+
+function renderDevicePills() {
+  const d = getDevice();
+  document.getElementById('devicePills').innerHTML =
+    `<span class="device-tag">🖥 ${d.device}</span>
+     <span class="device-tag">🌐 ${d.browser}</span>
+     <span class="device-tag">📐 ${d.screen}</span>`;
+}
+renderDevicePills();
+
+function selectPrio(btn) {
+  document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedPrio = btn.dataset.p;
+}
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+
+function handleFiles(files) {
+  Array.from(files).forEach(f => { if (!attachedFiles.find(x => x.name === f.name && x.size === f.size)) attachedFiles.push(f); });
+  renderFiles();
+}
+function renderFiles() {
+  document.getElementById('fileList').innerHTML = attachedFiles.map((f, i) => {
+    const icon = f.type.startsWith('video') ? '🎬' : f.type.startsWith('image') ? '🖼' : '📄';
+    const size = f.size > 1048576 ? (f.size/1048576).toFixed(1)+' Mo' : Math.round(f.size/1024)+' Ko';
+    return `<div class="file-item"><span class="file-icon">${icon}</span><span class="file-name">${f.name}</span><span class="file-size">${size}</span><button class="file-remove" onclick="removeFile(${i})">×</button></div>`;
+  }).join('');
+}
+function removeFile(i) { attachedFiles.splice(i, 1); renderFiles(); }
+
+let toastTimer;
+function showToast(type, title, msg) {
+  clearTimeout(toastTimer);
+  const t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = type === 'success' ? '✅' : '❌';
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  toastTimer = setTimeout(hideToast, 8000);
+}
+function hideToast() { document.getElementById('toast').classList.remove('show'); }
+
+function setProgress(pct) {
+  const w = document.getElementById('progressWrap');
+  w.classList.toggle('visible', pct > 0 && pct < 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+async function uploadFile(file) {
+  const b64 = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+  const res = await fetch('/api/upload', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Filename': file.name,
+      'X-Content-Type': file.type || 'application/octet-stream'
+    },
+    body: JSON.stringify({ data: b64 })
+  });
+  if (!res.ok) throw new Error('Upload échoué : ' + file.name);
+  const data = await res.json();
+  return { token: data.token, filename: file.name, content_type: file.type || 'application/octet-stream' };
+}
+
+// ── FORM STATE ──
+function getFormValues() {
+  const reporter   = document.getElementById('reporter').value;
+  const project    = document.getElementById('project').value;
+  const subproject = document.getElementById('subproject').value;
+  const env        = subproject ? project + ' › ' + subproject : project;
+  const subject    = document.getElementById('subject').value.trim();
+  const extra      = document.getElementById('extra').value.trim();
+  return { reporter, project, subproject, env, subject, extra };
+}
+
+function validateForm() {
+  const { reporter, project, subject } = getFormValues();
+  if (!reporter)     { showToast('error', 'Champ manquant', 'Veuillez sélectionner votre nom dans la liste.'); return false; }
+  if (!project)      { showToast('error', 'Champ manquant', 'Veuillez sélectionner un projet.'); return false; }
+  const subprojectEl = document.getElementById('subprojectField');
+  const subproject = document.getElementById('subproject').value;
+  if (subprojectEl.style.display !== 'none' && !subproject) { showToast('error', 'Champ manquant', 'Veuillez sélectionner un sous-projet.'); return false; }
+  if (!subject)      { showToast('error', 'Champ manquant', 'Veuillez saisir un titre pour le ticket.'); return false; }
+  if (!selectedPrio) { showToast('error', 'Priorité manquante', 'Veuillez sélectionner un niveau de priorité.'); return false; }
+  return true;
+}
+
+// ── STEP 1 : click → analyse IA → modal ──
+let pendingQuestions = [];
+
+async function handleSubmitClick() {
+  if (!validateForm()) return;
+
+  const { subject, extra, env } = getFormValues();
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+
+  // Show modal in "analysing" state
+  const overlay = document.getElementById('modalOverlay');
+  const body = document.getElementById('modalBody');
+  body.innerHTML = '<div class="modal-analyzing"><span>✦ Analyse en cours</span><span class="dots"></span></div>';
+  overlay.classList.add('open');
+
+  try {
+    const context = `Projet : ${env}\nTitre du bug : ${subject}\nDescription : ${extra || '(aucune description)'}`;
+
+    const response = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subject, extra, env
+      })
+    });
+
+    const parsed = await response.json();
+    pendingQuestions = parsed.questions || [];
+  } catch(e) {
+    console.error('IA error', e);
+    pendingQuestions = [];
+  }
+
+  btn.classList.remove('loading'); btn.disabled = false;
+
+  if (pendingQuestions.length === 0) {
+    overlay.classList.remove('open');
+    await sendTicket();
+    return;
+  }
+
+  // Render questions
+  body.innerHTML = pendingQuestions.map((q, i) => `
+    <div class="modal-question">
+      <div class="modal-q-label"><span class="modal-q-num">${i+1}</span></div>
+      <div class="modal-q-text">${q}</div>
+      <textarea class="modal-answer" id="answer_${i}" placeholder="Votre réponse…" rows="2"></textarea>
+    </div>
+  `).join('');
+}
+
+// ── STEP 2a : send with answers ──
+async function sendWithAnswers() {
+  const answers = pendingQuestions.map((q, i) => {
+    const a = (document.getElementById('answer_' + i)?.value || '').trim();
+    return a ? `- ${q}\n  ${a}` : null;
+  }).filter(Boolean);
+
+  const extraInfo = answers.length > 0 ? answers.join('\n') : null;
+  document.getElementById('modalOverlay').classList.remove('open');
+  await sendTicket(extraInfo);
+}
+
+// ── STEP 2b : send without answers ──
+async function sendTicket(extraInfo = null) {
+  document.getElementById('modalOverlay').classList.remove('open');
+
+  const { reporter, env, subject, extra } = getFormValues();
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading'); btn.disabled = true; setProgress(10);
+
+  try {
+    const d = getDevice();
+    const prio = PRIO_MAP[selectedPrio];
+    let desc = `**Rapporté par :** ${reporter}\n**Environnement :** ${env}\n**Priorité :** ${prio.label}\n\n---\n\n`;
+    if (extra) desc += `**Détails :**\n${extra}\n\n---\n\n`;
+    if (extraInfo) desc += `**Infos complémentaires :**\n${extraInfo}\n\n---\n\n`;
+    desc += `**Informations système (auto) :**\n- 🖥 Appareil : ${d.device}\n- 🌐 Navigateur : ${d.browser}\n- 📐 Résolution : ${d.screen}\n`;
+
+    setProgress(30);
+    let uploads = [];
+    for (let i = 0; i < attachedFiles.length; i++) {
+      setProgress(30 + Math.round((i / attachedFiles.length) * 45));
+      uploads.push(await uploadFile(attachedFiles[i]));
+    }
+    setProgress(80);
+
+    const res = await fetch('/api/create-issue', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ project_id: PROJECT_ID, subject: `[${env}] ${subject}`, description: desc, priority_id: prio.id, uploads })
+    });
+
+    setProgress(95);
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.errors ? e.errors.join(', ') : `Erreur ${res.status}`); }
+    const result = await res.json();
+    setProgress(100);
+    showToast('success', 'Ticket créé !', `#${result.issue.id} — [${env}] ${subject}`);
+
+    setTimeout(() => {
+      document.getElementById('reporterInput').value = '';
+      document.getElementById('reporter').value = '';
+      document.getElementById('acClear').classList.remove('visible');
+      document.getElementById('project').value = '';
+      document.getElementById('subproject').value = '';
+      document.getElementById('subprojectField').style.display = 'none';
+      document.getElementById('subject').value = '';
+      document.getElementById('extra').value = '';
+      document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('active'));
+      selectedPrio = null; attachedFiles = []; renderFiles(); setProgress(0);
+    }, 1200);
+
+  } catch(e) {
+    console.error(e);
+    showToast('error', 'Erreur', e.message || 'Vérifiez la connexion ou la configuration.');
+    setProgress(0);
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+</script>
+</body>
+</html>
