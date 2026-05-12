@@ -1,0 +1,8 @@
+{
+  "name": "rhinov-tickets",
+  "version": "1.0.0",
+  "description": "Outil interne de signalement de bugs Rhinov",
+  "dependencies": {
+    "busboy": "^1.6.0"
+  }
+}
